@@ -48,7 +48,7 @@
 
   <!-- Meta Pixel -->
   <script>
-    const PIXEL_ID = '2907329726108399';
+    const PIXEL_ID = '1391288831895635';
     !function(f,b,e,v,n,t,s){
       if(f.fbq) return; n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -209,19 +209,19 @@ window.addEventListener('load', async () => {
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ subdomain: 'memewb', fbc, fbp })
+      body: JSON.stringify({ subdomain: 'bettroya', fbc, fbp })
     }
   );
   if (!resp.ok) throw new Error(`LineManager error: ${resp.status}`);
   const { whatsapp_number: number, uuid } = await resp.json();
 
   // → Enviar EventPayload a tu segundo API Gateway
-  const SECONDARY_API = 'https://ty12v433pk.execute-api.us-east-2.amazonaws.com/prod/F1-MMWB';
+  const SECONDARY_API = 'https://05p37g24v8.execute-api.us-east-2.amazonaws.com/prod/F1-MONITOREO-TROYA-FINAL';
   const EventPayload = {
     uuid,
     name,
     timestamp: new Date().toISOString(),
-    subdomain: 'memewb'
+    subdomain: 'bettroya'
   };
   fetch(SECONDARY_API, {
     method: 'POST',
