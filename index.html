@@ -14,6 +14,8 @@
   />
   <!-- Lottie Player -->
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" defer></script>
+  <!-- VisitorId -->
+  <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
 
   <!-- Estilos inline para preloader y ocultar body -->
   <style>
@@ -183,6 +185,17 @@
       });
     }
 
+//funcion VisitorId
+function getVisitorId() {
+  return FingerprintJS.load()
+    .then(fp => fp.get())
+    .then(result => result.visitorId)
+    .catch(err => {
+      console.warn('No se pudo obtener visitorId:', err);
+      return null;
+    });
+}
+
 window.addEventListener('load', async () => {
   // Listener CTA
   document.getElementById('ctaButton').addEventListener('click', async e => {
@@ -215,25 +228,22 @@ window.addEventListener('load', async () => {
   if (!resp.ok) throw new Error(`LineManager error: ${resp.status}`);
   const { whatsapp_number: number, uuid } = await resp.json();
 
-  // → Enviar EventPayload a tu segundo API Gateway
-  const SECONDARY_API = 'https://05p37g24v8.execute-api.us-east-2.amazonaws.com/prod/F1-MONITOREO-TROYA-FINAL';
-  const EventPayload = {
-    uuid,
-    name,
-    timestamp: new Date().toISOString(),
-    subdomain: 'bettroya'
-  };
-  fetch(SECONDARY_API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(EventPayload)
-  })
-  .then(res => {
-    if (!res.ok) console.warn('No se pudo registrar el UUID:', res.status);
-    return res.json().catch(() => {});
-  })
-  .then(json => console.log('Registro UUID OK:', json))
-  .catch(err => console.error('Error en registro UUID:', err));
+ // Enviar evento SOLO si está permitido
+  if (allowTracking) {
+    const SECONDARY_API = 'https://ty12v433pk.execute-api.us-east-2.amazonaws.com/prod/F1-MMWB';
+    const EventPayload = {
+      uuid,
+      name,
+      timestamp: new Date().toISOString(),
+      subdomain: 'memewb'
+    };
+    
+    fetch(SECONDARY_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(EventPayload)
+    }).catch(console.error);
+  }
 
   // Construir y redirigir al chat de WhatsApp
     const msg = `Hola, vengo por el bono de bienvenida! Mi código promocional es: ${uuid}
