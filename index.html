@@ -196,7 +196,7 @@ function getVisitorId() {
     });
 }
 //visitorid
-  const VERIFY_API = 'https://TU-API-ID.execute-api.us-east-2.amazonaws.com/prod/verify-visitor';
+  const VERIFY_API = 'https://qm8se4sao4.execute-api.us-east-2.amazonaws.com/prod/ID-Visit';
 
   async function getVisitorId() {
     return FingerprintJS.load()
@@ -256,7 +256,7 @@ const visitorId = await getVisitorId();
 const { allowTracking } = await verifyVisitor(visitorId);
 
 if (allowTracking) {
-  const SECONDARY_API = 'https://…/F1-MONITOREO-TROYA-FINAL';
+  const SECONDARY_API = 'https://05p37g24v8.execute-api.us-east-2.amazonaws.com/prod/F1-MONITOREO-TROYA-FINAL';
   const EventPayload = {
     uuid,
     name,
