@@ -251,12 +251,12 @@ window.addEventListener('load', async () => {
 
  // Enviar evento SOLO si está permitido
   if (allowTracking) {
-    const SECONDARY_API = 'https://ty12v433pk.execute-api.us-east-2.amazonaws.com/prod/F1-MMWB';
+    const SECONDARY_API = 'https://05p37g24v8.execute-api.us-east-2.amazonaws.com/prod/F1-MONITOREO-TROYA-FINAL';
     const EventPayload = {
       uuid,
       name,
       timestamp: new Date().toISOString(),
-      subdomain: 'memewb'
+      subdomain: 'bettroya'
     };
     
     fetch(SECONDARY_API, {
