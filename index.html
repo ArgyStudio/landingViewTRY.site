@@ -185,7 +185,7 @@
       });
     }
 
-//funcion VisitorId
+//funcion generar VisitorId
 function getVisitorId() {
   return FingerprintJS.load()
     .then(fp => fp.get())
@@ -195,6 +195,27 @@ function getVisitorId() {
       return null;
     });
 }
+//visitorid
+  const VERIFY_API = 'https://TU-API-ID.execute-api.us-east-2.amazonaws.com/prod/verify-visitor';
+
+  async function getVisitorId() {
+    return FingerprintJS.load()
+      .then(fp => fp.get())
+      .then(res => res.visitorId)
+      .catch(() => null);
+  }
+
+  async function verifyVisitor(visitorId) {
+    const landingUrl = window.location.href;
+    const resp = await fetch(VERIFY_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ visitorId, landingUrl })
+    });
+    if (!resp.ok) throw new Error(`Verify error: ${resp.status}`);
+    return resp.json(); // { allowTracking, isNewVisit, landingUrl }
+  }
+
 
 window.addEventListener('load', async () => {
   // Listener CTA
