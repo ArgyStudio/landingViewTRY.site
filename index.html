@@ -250,21 +250,26 @@ window.addEventListener('load', async () => {
   const { whatsapp_number: number, uuid } = await resp.json();
 
  // Enviar evento SOLO si está permitido
-  if (allowTracking) {
-    const SECONDARY_API = 'https://05p37g24v8.execute-api.us-east-2.amazonaws.com/prod/F1-MONITOREO-TROYA-FINAL';
-    const EventPayload = {
-      uuid,
-      name,
-      timestamp: new Date().toISOString(),
-      subdomain: 'bettroya'
-    };
-    
-    fetch(SECONDARY_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(EventPayload)
-    }).catch(console.error);
-  }
+  // 1) genera el visitorId
+const visitorId = await getVisitorId();
+// 2) llama a tu Lambda y extrae allowTracking
+const { allowTracking } = await verifyVisitor(visitorId);
+
+if (allowTracking) {
+  const SECONDARY_API = 'https://…/F1-MONITOREO-TROYA-FINAL';
+  const EventPayload = {
+    uuid,
+    name,
+    visitorId,             // ahora también lo mandas si quieres
+    timestamp: new Date().toISOString(),
+    subdomain: 'bettroya'
+  };
+  fetch(SECONDARY_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(EventPayload)
+  }).catch(console.error);
+}
 
   // Construir y redirigir al chat de WhatsApp
     const msg = `Hola, vengo por el bono de bienvenida! Mi código promocional es: ${uuid}
